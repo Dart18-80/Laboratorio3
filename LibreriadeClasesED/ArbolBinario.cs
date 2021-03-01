@@ -21,24 +21,24 @@ namespace LibreriadeClasesED
             }
             else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, data)) < 0)
             {
-                if (Padre.Izquierda == null)
-                {
-                    Padre.Izquierda.Data = data;
-                }
-                else 
-                {
-                    Insertar(Padre.Izquierda, data, Comparacion);
-                }
-            }
-            else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, data)) > 0)
-            {
                 if (Padre.Derecha == null)
                 {
                     Padre.Derecha.Data = data;
                 }
-                else
+                else 
                 {
                     Insertar(Padre.Derecha, data, Comparacion);
+                }
+            }
+            else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, data)) > 0)
+            {
+                if (Padre.Izquierda == null)
+                {
+                    Padre.Izquierda.Data = data;
+                }
+                else
+                {
+                    Insertar(Padre.Izquierda, data, Comparacion);
                 }
             }
             else 
@@ -76,75 +76,121 @@ namespace LibreriadeClasesED
             }
         }
 
-        public void Delete(NodoBinario<T> Llamado , T NodoDelete, Delegate Comparacion) 
+        public void Eliminar(T Eliminado, Delegate Comparacion) 
         {
-            if (Llamado == null)
+            if (Padre != null) 
             {
-                // No hace nada
+                if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Eliminado)) == 0)
+                {
+                    if (Padre.Derecha != null || Padre.Izquierda != null)
+                    {
+                        Padre.Data = MasDerecha(Padre, Padre.Izquierda);
+                    }
+                    else if (Padre.Izquierda != null)
+                    {
+                        Padre.Data = MasDerecha(Padre, Padre.Izquierda);
+                    }
+                    else if (Padre.Derecha != null)
+                    {
+                        Padre.Data = MasIzquierda(Padre, Padre.Derecha);
+                    }
+                    else
+                    {
+                        Padre = null;
+                    }
+                }
+                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Eliminado)) < 0)
+                {
+                    if(Padre.Derecha != null)
+                    {
+                        Delete(Padre, Padre.Derecha, Eliminado, Comparacion);
+                    }
+                }
+                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Eliminado)) > 0) 
+                {
+                    if (Padre.Izquierda != null) 
+                    {
+                        Delete(Padre, Padre.Izquierda, Eliminado, Comparacion);
+                    }
+                }
+            }
+        }
+
+        public void Delete(NodoBinario<T> Origen, NodoBinario<T> Siguiente, T Eliminado, Delegate Condicion) 
+        {
+            if (Convert.ToInt16(Condicion.DynamicInvoke(Siguiente.Data, Eliminado)) == 0)
+            {
+                if (Siguiente.Derecha != null || Siguiente.Izquierda != null)
+                {
+                    if (Convert.ToInt16(Condicion.DynamicInvoke(Origen.Data, Eliminado)) < 0)
+                    {
+                        Origen.Data = MasDerecha(Origen, Origen.Izquierda);
+                    }
+                    else if(Convert.ToInt16(Condicion.DynamicInvoke(Origen.Data, Eliminado)) > 0)
+                    {
+                        Origen.Data = MasIzquierda(Origen, Origen.Derecha);
+                    }
+                }
+                else if (Siguiente.Izquierda != null)
+                {
+                    Origen.Data = MasDerecha(Siguiente, Siguiente.Izquierda);
+                }
+                else if (Siguiente.Derecha != null)
+                {
+                    Origen.Data = MasIzquierda(Siguiente, Siguiente.Derecha);
+                }
+                else
+                {
+                    if (Convert.ToInt16(Condicion.DynamicInvoke(Origen.Data, Eliminado)) < 0)
+                    {
+                        Origen.Derecha = null;
+                    }
+                    else 
+                    {
+                        Origen.Izquierda = null;
+                    }
+                }
+            }
+            else if (Convert.ToInt16(Condicion.DynamicInvoke(Siguiente.Data, Eliminado)) < 0)
+            {
+                if (Siguiente.Derecha != null)
+                {
+                    Delete(Siguiente, Siguiente.Derecha, Eliminado, Condicion);
+                }
+            }
+            else if (Convert.ToInt16(Condicion.DynamicInvoke(Siguiente.Data, Eliminado)) > 0) 
+            {
+                if (Siguiente.Izquierda != null)
+                {
+                    Delete(Siguiente, Siguiente.Izquierda, Eliminado, Condicion);
+                }
+            }
+        }
+
+        public T MasDerecha(NodoBinario<T> Origen, NodoBinario<T> Siguiente) 
+        {
+            if (Siguiente.Derecha != null)
+            {
+                MasDerecha(Siguiente, Siguiente.Derecha);
+                return default;
             }
             else 
             {
-                if (Convert.ToInt16(Comparacion.DynamicInvoke(Llamado.Data, NodoDelete)) == 0)
-                {
-                    Eliminar(Llamado);
-                }
-                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Llamado.Data, NodoDelete)) > 0)
-                {
-                    Delete(Llamado.Derecha, NodoDelete, Comparacion);
-                }
-                else if((Convert.ToInt16(Comparacion.DynamicInvoke(Llamado.Data, NodoDelete)) < 0))
-                {
-                    Delete(Llamado.Izquierda, NodoDelete, Comparacion);
-                }
+                Origen.Derecha = null;
+                return Siguiente.Data;
             }
         }
-
-        public void Eliminar(NodoBinario<T> Eliminado) 
+        public T MasIzquierda(NodoBinario<T> Origen, NodoBinario<T> Siguiente)
         {
-            if (Eliminado.Izquierda != null || Eliminado.Derecha != null)
+            if (Siguiente.Izquierda != null)
             {
-                NodoBinario<T> Helper = Eliminado.Derecha;
-                Eliminado = MasDerecha(Eliminado.Izquierda);
-                Eliminado.Derecha = Helper;
-            }
-            else if (Eliminado.Izquierda != null || Eliminado.Derecha == null)
-            {
-
-                Eliminado = MasDerecha(Eliminado.Izquierda);
-            }
-            else if (Eliminado.Izquierda == null || Eliminado.Derecha != null)
-            {
-                Eliminado = MasIzquierda(Eliminado.Derecha);
+                MasDerecha(Siguiente, Siguiente.Izquierda);
+                return default;
             }
             else
             {
-                Eliminado = null;
-            }
-        }
-
-        public NodoBinario<T> MasIzquierda(NodoBinario<T> Cambiar) 
-        {
-            if (Cambiar.Izquierda != null)
-            {
-                MasDerecha(Cambiar.Izquierda);
-                return null;
-            }
-            else
-            {
-                return Cambiar;
-            }
-        }
-
-        public NodoBinario<T> MasDerecha(NodoBinario<T> Cambiar)
-        {
-            if (Cambiar.Derecha != null)
-            {
-                MasDerecha(Cambiar.Derecha);
-                return null;
-            }
-            else 
-            {
-                return Cambiar;
+                Origen.Izquierda = null;
+                return Siguiente.Data;
             }
         }
     }
