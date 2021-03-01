@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LibreriadeClasesED
 {
-    class ArbolBinario <T> where T : IComparable
+    public class ArbolBinario <T> where T : IComparable
     {
         public NodoBinario<T> Padre { get; set; }
 
@@ -101,17 +101,21 @@ namespace LibreriadeClasesED
                 }
                 else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Eliminado)) < 0)
                 {
-                    if(Padre.Derecha != null)
+                    if (Padre.Derecha != null)
                     {
                         Delete(Padre, Padre.Derecha, Eliminado, Comparacion);
                     }
                 }
-                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Eliminado)) > 0) 
+                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Eliminado)) > 0)
                 {
-                    if (Padre.Izquierda != null) 
+                    if (Padre.Izquierda != null)
                     {
                         Delete(Padre, Padre.Izquierda, Eliminado, Comparacion);
                     }
+                }
+                else 
+                {
+                    //No se encontro el nodo
                 }
             }
         }
@@ -121,23 +125,16 @@ namespace LibreriadeClasesED
             if (Convert.ToInt16(Condicion.DynamicInvoke(Siguiente.Data, Eliminado)) == 0)
             {
                 if (Siguiente.Derecha != null || Siguiente.Izquierda != null)
-                {
-                    if (Convert.ToInt16(Condicion.DynamicInvoke(Origen.Data, Eliminado)) < 0)
-                    {
-                        Origen.Data = MasDerecha(Origen, Origen.Izquierda);
-                    }
-                    else if(Convert.ToInt16(Condicion.DynamicInvoke(Origen.Data, Eliminado)) > 0)
-                    {
-                        Origen.Data = MasIzquierda(Origen, Origen.Derecha);
-                    }
+                { 
+                    Siguiente.Data = MasDerecha(Siguiente, Siguiente.Izquierda);
                 }
                 else if (Siguiente.Izquierda != null)
                 {
-                    Origen.Data = MasDerecha(Siguiente, Siguiente.Izquierda);
+                    Siguiente.Data = MasDerecha(Siguiente, Siguiente.Izquierda);
                 }
                 else if (Siguiente.Derecha != null)
                 {
-                    Origen.Data = MasIzquierda(Siguiente, Siguiente.Derecha);
+                    Siguiente.Data = MasIzquierda(Siguiente, Siguiente.Derecha);
                 }
                 else
                 {
@@ -192,6 +189,11 @@ namespace LibreriadeClasesED
                 Origen.Izquierda = null;
                 return Siguiente.Data;
             }
+        }
+
+        public T EnviarDentro() 
+        {
+            return Padre.Data;
         }
     }
 }

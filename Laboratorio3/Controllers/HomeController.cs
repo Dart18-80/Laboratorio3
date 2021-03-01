@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Laboratorio3.Models;
+using LibreriadeClasesED;
+using Laboratorio3.Helpers;
+
 
 namespace Laboratorio3.Controllers
 {
