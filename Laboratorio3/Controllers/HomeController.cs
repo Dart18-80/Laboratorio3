@@ -20,8 +20,9 @@ namespace Laboratorio3.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHostingEnvironment hostingEnvironment;
+        string idparacliente=null;
 
-        public HomeController(ILogger<HomeController> logger,IHostingEnvironment hostingEnvironment)
+        public HomeController(ILogger<HomeController> logger, IHostingEnvironment hostingEnvironment)
         {
             _logger = logger;
             this.hostingEnvironment = hostingEnvironment;
@@ -40,14 +41,14 @@ namespace Laboratorio3.Controllers
         public IActionResult CreateCSV(InventarioMedicina model)
         {
             string uniqueFileName = null;
-            if (model.FileC!=null)
+            if (model.FileC != null)
             {
                 string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Upload");
                 uniqueFileName = model.FileC.FileName;
                 string filepath = Path.Combine(uploadsFolder, uniqueFileName);
                 if (!System.IO.File.Exists(filepath))
                 {
-                    using (var INeadLearn= new FileStream(filepath, FileMode.CreateNew))
+                    using (var INeadLearn = new FileStream(filepath, FileMode.CreateNew))
                     {
                         model.FileC.CopyTo(INeadLearn);
                     }
@@ -60,21 +61,20 @@ namespace Laboratorio3.Controllers
                     {
                         if (row.Split(',')[0] != "id")
                         {
-                            var result=Regex.Split(row, "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
+                            var result = Regex.Split(row, "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
                             Singleton.Instance.ListaJugador.AddHead(new InventarioMedicina
                             {
-                                Id=Convert.ToString(result[1]),
-                                NombreMedicina=Convert.ToString(result[3]),
+                                NombreMedicina = Convert.ToString(result[3]),
+                                Id = Convert.ToString(result[1]),
                                 Descripcion = Convert.ToString(result[5]),
                                 CasaProductora = Convert.ToString(result[7]),
                                 Precio = Convert.ToString(result[9]),
-                                Existencia=Convert.ToInt32(result[11])
-
+                                Existencia = Convert.ToInt32(result[11])
                             });
                         }
                     }
                 }
-                return RedirectToAction("ListaMedicina");
+                return RedirectToAction("IngresoPedido");
             }
             return View();
         }
@@ -89,8 +89,57 @@ namespace Laboratorio3.Controllers
         {
             return View();
         }
+        public IActionResult IngresoPedido()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult IngresoPedido(IFormCollection collection, string IddeNit)
+        {
+            ViewData["CurrentNit"] = IddeNit;
+            idparacliente = IddeNit;
+            try
+            {
+                var NuevoCliente = new Models.Cliente  
+                {
+                    NombreCliente = collection["NombreCliente"],
+                    DireccionCliente=collection["DireccionCliente"],
+                    Nit = IddeNit,
+                    Idcliente = Convert.ToInt32(Cliente.cont++)
+                };
+                Singleton.Instance.ListaCliente.Add(NuevoCliente);
+                return RedirectToAction("AgregarBuscarMedicina");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        public IActionResult AgregarBuscarMedicina(string SSearch)
+        {
+            ViewData["CurrentFilterSearch"] = SSearch;
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+            return View(Singleton.Instance.ListExistencia);
+        }
+        public IActionResult Agregar() 
+        {
+            return RedirectToAction("AgregarBuscarMedicina"); 
+        }
+    public IActionResult OrdenCliente() 
+        {
+            string Nombre = Singleton.Instance.ListaCliente[Cliente.cont - 1].NombreCliente;
+            string Direccion = Singleton.Instance.ListaCliente[Cliente.cont - 1].DireccionCliente;
+            string Nit = Singleton.Instance.ListaCliente[Cliente.cont - 1].Nit;
+
+
+            ViewData["Nombre"] = Nombre;
+            ViewData["Direccion"] = Direccion;
+            ViewData["Nit"] = Nit;
+            ViewData["Medi"] = "";
+            ViewData["Total"] = "";
+            return View() ;
+        }
+[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

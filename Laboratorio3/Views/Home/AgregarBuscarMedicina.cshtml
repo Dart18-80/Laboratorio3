@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Laboratorio3.Models.InventarioMedicina>
+
+@{
+    ViewData["Title"] = "AgregarBuscarMedicina";
+}
+
+<h1>Medicamentos</h1>
+
+<form asp-action="AgregarBuscarMedicina" method="get">
+    <div class="from-action no-gutters">
+        <p>
+           Nombre del Medicamento :<input type="text" name="SSearch" value="@ViewData["CurrentFilterSearch"]" /><br />
+            <input type="submit" value="Buscar" class="btn-info" />
+        </p>
+    </div>
+</form>
+<form asp-action="OrdenCliente" method="get">
+    <div class="from-action no-gutters">
+        <input type="submit" value="Ver mi orden" class="btn-info" />
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreMedicina)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Precio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Existencia)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreMedicina)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CasaProductora)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Precio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Existencia)
+            </td>
+            <td>
+                @Html.ActionLink("Agregar", "Agregar", new { /* id=item.PrimaryKey */ }) |
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
