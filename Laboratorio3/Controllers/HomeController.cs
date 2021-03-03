@@ -71,6 +71,10 @@ namespace Laboratorio3.Controllers
                                 Precio = Convert.ToString(result[9]),
                                 Existencia = Convert.ToInt32(result[11])
                             });
+                            if (Convert.ToInt32(result[11])!=0)
+                            {
+
+                            }
                         }
                     }
                 }
