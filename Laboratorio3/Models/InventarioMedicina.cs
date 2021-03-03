@@ -18,9 +18,13 @@ namespace Laboratorio3.Models
 
         public IFormFile FileC { get; set; }
 
-        public int CompareTo(object obj)
+        public int CompareTo(InventarioMedicina Medicamento1, InventarioMedicina other, Delegate Condicion)
         {
-            throw new NotImplementedException();
+            return Convert.ToInt32(Condicion.DynamicInvoke(Medicamento1, other));
+        }
+        public int CompareByName(InventarioMedicina Medicamento1, string Medicamento2)
+        {
+            return Medicamento1.NombreMedicina.CompareTo(Medicamento2);
         }
     }
 }
