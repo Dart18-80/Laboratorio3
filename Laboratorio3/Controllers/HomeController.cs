@@ -38,7 +38,7 @@ namespace Laboratorio3.Controllers
             return View();
         }
         delegate int Delagados(MedicinasBinario Med, string Med1);//llamar delegado
-        MedicinasBinario LlamadoClass = new MedicinasBinario();
+        InventarioMedicina LlamadoClass = new InventarioMedicina();
         [HttpPost]
         public IActionResult CreateCSV(InventarioMedicina model)
         {
@@ -75,8 +75,8 @@ namespace Laboratorio3.Controllers
                             });
                             if (Convert.ToInt32(result[11])!=0)
                             {
-                                Delagados InvocarNombre = new Delagados(LlamadoClass.CompareyName);
-                                //Singleton.Instance.AccesoArbol.Add(Convert.ToString(result[3]), InvocarNombre);
+                                Delagados InvocarNombre = new Delagados(LlamadoClass.CompareNameMedi);
+                                Singleton.Instance.AccesoArbol.Add(Singleton.Instance.ListaJugador.Header, InvocarNombre);
                             }
                         }
                     }

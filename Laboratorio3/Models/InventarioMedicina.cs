@@ -18,17 +18,23 @@ namespace Laboratorio3.Models
 
         public IFormFile FileC { get; set; }
 
-        public int CompareTo(InventarioMedicina Medicamento1, InventarioMedicina other, Delegate Condicion)
+        public int CompareTo(MedicinasBinario Medicamento1, MedicinasBinario other, Delegate Condicion)
         {
             return Convert.ToInt32(Condicion.DynamicInvoke(Medicamento1, other));
         }
-        public int CompareNameMedi(InventarioMedicina Medicamento1, string Medicamento2)
+        public int CompareNameMedi(MedicinasBinario Medicamento1, string Medicamento2)
         {
-            return Medicamento1.NombreMedicina.CompareTo(Medicamento2);
+            return Medicamento1.Nombre.CompareTo(Medicamento2);
         }
-        public int CompareExist(InventarioMedicina MedicinaExist)
+        public int CompareExist(InventarioMedicina Medicamento1)
         {
-            return MedicinaExist.Existencia.CompareTo(0);
+            return Medicamento1.NombreMedicina.CompareTo(0);
+        }
+        public void Reabastecer(InventarioMedicina MedicinaExist)
+        {
+            Random nre = new Random();
+            int sa = nre.Next(1,15);
+            MedicinaExist.Existencia = sa;
         }
         public int CompareTo(object obj)
         {
