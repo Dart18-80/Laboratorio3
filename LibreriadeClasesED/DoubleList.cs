@@ -19,12 +19,13 @@ namespace LibreriadeClasesED
             Tail = null;
         }
 
-        public void AddHead(T data)
+        public Nodo<T> AddHead(T data)
         {
             if (Header == null)
             {
                 Header = new Nodo<T>() { Data = data };
                 Tail = Header;
+                return Header;
             }
             else
             {
@@ -35,6 +36,7 @@ namespace LibreriadeClasesED
                     Next = oldHead
                 };
                 oldHead.Previous = Header;
+                return oldHead;
             }
         }
         public List<T> Mostrar(Nodo<T> Cabeza)

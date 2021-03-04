@@ -40,7 +40,7 @@ namespace Laboratorio3.Controllers
         delegate int Delagados(MedicinasBinario Med, string Med1);//llamar delegado
         delegate int Delagado(InventarioMedicina Med);//llamar delegado
 
-        InventarioMedicina LlamadoClass = new InventarioMedicina();
+        MedicinasBinario LlamadoMedBinario = new MedicinasBinario();
         [HttpPost]
         public IActionResult CreateCSV(InventarioMedicina model)
         {
@@ -66,19 +66,24 @@ namespace Laboratorio3.Controllers
                         if (row.Split(',')[0] != "id")
                         {
                             var result = Regex.Split(row, "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
-                            Singleton.Instance.ListaJugador.AddHead(new InventarioMedicina
-                            {
+                            InventarioMedicina Nuevo = new InventarioMedicina { 
                                 NombreMedicina = Convert.ToString(result[3]).Replace('"', ' '),
                                 Id = Convert.ToString(result[1]),
                                 Descripcion = Convert.ToString(result[5]).Replace('"', ' '),
                                 CasaProductora = Convert.ToString(result[7]).Replace('"', ' '),
                                 Precio = Convert.ToString(result[9]),
-                                Existencia = Convert.ToInt32(result[11])
-                            });
+                                Existencia = Convert.ToInt32(result[11]),
+                            };
+                            Nodo<InventarioMedicina> Direccion = Singleton.Instance.ListaJugador.AddHead(Nuevo);
+                            MedicinasBinario IngresoArbol = new MedicinasBinario
+                            {
+                                Nombre = Convert.ToString(result[3]).Replace('"', ' '),
+                                Posicion = Direccion
+                            };
                             if (Convert.ToInt32(result[11])!=0)
                             {
-                                Delagados InvocarNombre = new Delagados(LlamadoClass.CompareNameMedi);
-                                //Singleton.Instance.AccesoArbol.Add(Singleton.Instance.ListaJugador.Header, InvocarNombre);
+                                Delagados InvocarNombre = new Delagados(LlamadoMedBinario.CompareToNombre);
+                                Singleton.Instance.AccesoArbol.Add(IngresoArbol , InvocarNombre);
                             }
                         }
                     }

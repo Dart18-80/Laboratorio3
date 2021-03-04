@@ -2,13 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LibreriadeClasesED;
 
 namespace Laboratorio3.Models
 {
     public class MedicinasBinario : IComparable
     {
         public string Nombre { get; set; }
-        public int Posicion { get; set; }    
+        public Nodo<InventarioMedicina> Posicion { get; set; }    
+
+        public int CompareToNombre(MedicinasBinario obj, string nombre)
+        {
+            if (Convert.ToInt16(obj.Nombre.CompareTo(nombre)) > 0)
+                return 1;
+            else if (Convert.ToInt16(obj.Nombre.CompareTo(nombre)) < 0)
+                return -1;
+            else
+                return 0;
+        }
         public int CompareTo(object obj)
         {
             if (Convert.ToInt16(this.CompareTo(obj)) > 0)
@@ -18,5 +29,6 @@ namespace Laboratorio3.Models
             else
                 return 0;
         }
+
     }
 }
