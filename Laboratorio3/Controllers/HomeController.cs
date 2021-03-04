@@ -37,6 +37,8 @@ namespace Laboratorio3.Controllers
 
             return View();
         }
+        delegate int Delagados(MedicinasBinario Med, string Med1);//llamar delegado
+        MedicinasBinario LlamadoClass = new MedicinasBinario();
         [HttpPost]
         public IActionResult CreateCSV(InventarioMedicina model)
         {
@@ -64,16 +66,17 @@ namespace Laboratorio3.Controllers
                             var result = Regex.Split(row, "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
                             Singleton.Instance.ListaJugador.AddHead(new InventarioMedicina
                             {
-                                NombreMedicina = Convert.ToString(result[3]),
+                                NombreMedicina = Convert.ToString(result[3]).Replace('"', ' '),
                                 Id = Convert.ToString(result[1]),
-                                Descripcion = Convert.ToString(result[5]),
-                                CasaProductora = Convert.ToString(result[7]),
+                                Descripcion = Convert.ToString(result[5]).Replace('"', ' '),
+                                CasaProductora = Convert.ToString(result[7]).Replace('"', ' '),
                                 Precio = Convert.ToString(result[9]),
                                 Existencia = Convert.ToInt32(result[11])
                             });
                             if (Convert.ToInt32(result[11])!=0)
                             {
-
+                                Delagados InvocarNombre = new Delagados(LlamadoClass.CompareyName);
+                                //Singleton.Instance.AccesoArbol.Add(Convert.ToString(result[3]), InvocarNombre);
                             }
                         }
                     }
@@ -93,6 +96,11 @@ namespace Laboratorio3.Controllers
         {
             return View();
         }
+        public IActionResult Abastecer()
+        {
+           //Singleton.Instance.ListaJugador.ReabastecerMedicamentos(Singleton.Instance.ListaJugador.Header, condicion);
+            return View();
+        }
         public IActionResult IngresoPedido()
         {
             return View();
@@ -102,6 +110,9 @@ namespace Laboratorio3.Controllers
         {
             ViewData["CurrentNit"] = IddeNit;
             idparacliente = IddeNit;
+            string dine = "$546.2";
+            string a=dine.Replace("$", string.Empty);
+            double precio = Convert.ToDouble(a.ToString()) ;
             try
             {
                 var NuevoCliente = new Models.Cliente  
@@ -127,7 +138,7 @@ namespace Laboratorio3.Controllers
         }
         public IActionResult Agregar() 
         {
-            return RedirectToAction("AgregarBuscarMedicina"); 
+            return View(); 
         }
     public IActionResult OrdenCliente() 
         {

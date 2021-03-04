@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using LibreriadeClasesED;
+ 
 
 namespace LibreriadeClasesED
 {
@@ -48,7 +49,22 @@ namespace LibreriadeClasesED
                 return DataNode;
 
         }
-
+        public void ReabastecerMedicamentos(Nodo<T> cabeza, Delegate Condicion) 
+        {
+            if (cabeza!=null)
+            {
+                if (Convert.ToInt16(Condicion.DynamicInvoke(cabeza.Data)) == 0)
+                {
+                    Random rand = new Random();
+                    int nume = rand.Next(1,15);
+                    
+                }
+                else
+                {
+                    ReabastecerMedicamentos(cabeza.Next, Condicion);
+                }
+            }
+        }
         public T Buscar(Nodo<T> Cabeza, string FoundNodo, Delegate Condicion)
         {
             if (Cabeza == null)
