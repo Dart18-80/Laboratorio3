@@ -22,9 +22,18 @@ namespace Laboratorio3.Models
         {
             return Convert.ToInt32(Condicion.DynamicInvoke(Medicamento1, other));
         }
-        public int CompareByName(InventarioMedicina Medicamento1, string Medicamento2)
+        public int CompareNameMedi(InventarioMedicina Medicamento1, string Medicamento2)
         {
             return Medicamento1.NombreMedicina.CompareTo(Medicamento2);
+        }
+        public int CompareTo(object obj)
+        {
+            if (Convert.ToInt16(this.CompareTo(obj)) > 0)
+                return 1;
+            else if (Convert.ToInt16(this.CompareTo(obj)) < 0)
+                return -1;
+            else
+                return 0;
         }
     }
 }
