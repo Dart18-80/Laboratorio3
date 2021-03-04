@@ -76,7 +76,7 @@ namespace LibreriadeClasesED
             }
         }
 
-        public void Eliminar(T Eliminado, Delegate Comparacion) 
+        public void Eliminar(string Eliminado, Delegate Comparacion) 
         {
             if (Padre != null) 
             {
@@ -120,7 +120,7 @@ namespace LibreriadeClasesED
             }
         }
 
-        public void Delete(NodoBinario<T> Origen, NodoBinario<T> Siguiente, T Eliminado, Delegate Condicion) 
+        public void Delete(NodoBinario<T> Origen, NodoBinario<T> Siguiente, string Eliminado, Delegate Condicion) 
         {
             if (Convert.ToInt16(Condicion.DynamicInvoke(Siguiente.Data, Eliminado)) == 0)
             {
