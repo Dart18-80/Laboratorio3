@@ -53,11 +53,8 @@ namespace LibreriadeClasesED
         {
             if (cabeza!=null)
             {
-                if (Convert.ToInt16(Condicion.DynamicInvoke(cabeza.Data)) == 0)
+                if (cabeza.Data!=null)
                 {
-                    Random rand = new Random();
-                    int nume = rand.Next(1,15);
-                    
                 }
                 else
                 {
