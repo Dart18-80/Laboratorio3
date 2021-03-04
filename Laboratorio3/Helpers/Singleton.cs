@@ -18,8 +18,11 @@ namespace Laboratorio3.Helpers
                 return _instance;
             }
         }
-
-
+        public DoubleList<InventarioMedicina> ListaJugador = new DoubleList<InventarioMedicina>();
         public ArbolBinario<MedicinasBinario> AccesoArbol = new ArbolBinario<MedicinasBinario>();
+        public Nodo<InventarioMedicina> Procedimiento = new Nodo<InventarioMedicina>();
+        public List<InventarioMedicina> Nueva = new List<InventarioMedicina>();
+        public List<Cliente> ListaCliente = new List<Cliente>();
+        public List<InventarioMedicina> ListExistencia = new List<InventarioMedicina>();
     }
 }

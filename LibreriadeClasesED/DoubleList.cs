@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using LibreriadeClasesED;
+ 
 
 namespace LibreriadeClasesED
 {
@@ -47,7 +49,19 @@ namespace LibreriadeClasesED
                 return DataNode;
 
         }
-
+        public void ReabastecerMedicamentos(Nodo<T> cabeza, Delegate Condicion) 
+        {
+            if (cabeza!=null)
+            {
+                if (cabeza.Data!=null)
+                {
+                }
+                else
+                {
+                    ReabastecerMedicamentos(cabeza.Next, Condicion);
+                }
+            }
+        }
         public T Buscar(Nodo<T> Cabeza, string FoundNodo, Delegate Condicion)
         {
             if (Cabeza == null)
