@@ -88,19 +88,25 @@ namespace LibreriadeClasesED
             }
             else 
             {
+                T Igualar;
+
                 if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Nombre)) == 0)
                 {
-                    return Padre.Data;
+                    Igualar = Padre.Data;
                 }
                 else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Nombre)) < 0)
                 {
-                    BuscarNodo(Padre, Nombre, Comparacion);
+                    Igualar = BuscarNodo(Padre.Derecha, Nombre, Comparacion);
                 }
                 else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Nombre)) > 0)
                 {
-                    BuscarNodo(Padre, Nombre, Comparacion);
+                    Igualar = BuscarNodo(Padre.Izquierda, Nombre, Comparacion);
                 }
-                return default;
+                else 
+                {
+                    Igualar = default;
+                }
+                return Igualar;
             }
         }
 
