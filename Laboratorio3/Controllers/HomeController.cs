@@ -156,7 +156,9 @@ namespace Laboratorio3.Controllers
                 MedicinasBinario Buscado = Singleton.Instance.AccesoArbol.Buscar(SSearch, InvocarNombreuscar);
                 if (Buscado == default)
                 {
-                    //Mensaje que no lo encontro porque la cantidad de medicinas de ese nombre es 0
+                    DelegadoInventario delegadoInventario = new DelegadoInventario(LLamadoInventario.CompareName);
+                    InventarioMedicina NodoCantidad0 = Singleton.Instance.ListaMedicina.Buscar(Singleton.Instance.ListaMedicina.Header,SSearch, delegadoInventario);
+                    Singleton.Instance.NuevaListaCliente.Add(NodoCantidad0);
                 }
                 else 
                 {
