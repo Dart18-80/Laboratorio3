@@ -39,17 +39,16 @@ namespace LibreriadeClasesED
                 return oldHead.Previous;
             }
         }
-        public List<T> Mostrar(Nodo<T> Cabeza)
+        public List<T> Mostrar(Nodo<T> Cabeza, List<T> Lista)
         {
             if (Cabeza != null)
             {
-                DataNode.Add(Cabeza.Data);
-                Mostrar(Cabeza.Next);
+                Lista.Add(Cabeza.Data);
+                Mostrar(Cabeza.Next,Lista);
                 return null;
             }
             else
                 return DataNode;
-
         }
         public void ReabastecerMedicamentos(Nodo<T> cabeza, Delegate Condicion) 
         {
@@ -65,9 +64,23 @@ namespace LibreriadeClasesED
             }
         }
 
-        public void Modificar(T Medicina, T NodoCarrito, Delegate Condicion) 
+        public void Modificar(Nodo<T> Cabeza, string FoundNodo,T NuevoCarrito, Delegate Condicion) 
         {
-            
+            if (Cabeza == null)
+            {
+
+            }
+            else
+            {
+                if (Convert.ToInt16(Condicion.DynamicInvoke(Cabeza.Data, FoundNodo)) == 0)
+                {
+                    Cabeza.Data = NuevoCarrito;
+                }
+                else
+                {
+                    Modificar(Cabeza.Next, FoundNodo, NuevoCarrito, Condicion);
+                }
+            }
 
         }
         public T Buscar(Nodo<T> Cabeza, string FoundNodo, Delegate Condicion)

@@ -39,9 +39,14 @@ namespace Laboratorio3.Controllers
         }
         delegate int Delagados(MedicinasBinario Med1, MedicinasBinario Med2); //llamar delegado
         delegate int DelegadoString(MedicinasBinario Med1, string nombre);
+
+        delegate int DelegadoInventario(InventarioMedicina Med1, string nombre);
+
         delegate int Delagado(InventarioMedicina Med);//llamar delegado
 
         MedicinasBinario LlamadoMedBinario = new MedicinasBinario();
+        InventarioMedicina LLamadoInventario = new InventarioMedicina();
+
         [HttpPost]
         public IActionResult CreateCSV(InventarioMedicina model)
         {
@@ -75,7 +80,7 @@ namespace Laboratorio3.Controllers
                                 Precio = Convert.ToString(result[9]),
                                 Existencia = Convert.ToInt32(result[11])
                             };
-                            Nodo<InventarioMedicina> Direccion = Singleton.Instance.ListaJugador.AddHead(Nuevo);
+                            Nodo<InventarioMedicina> Direccion = Singleton.Instance.ListaMedicina.AddHead(Nuevo);
                             MedicinasBinario IngresoArbol = new MedicinasBinario
                             {
                                 Nombre = Convert.ToString(result[3]).Replace('"', ' '),
@@ -96,7 +101,7 @@ namespace Laboratorio3.Controllers
         public IActionResult ListaMedicina()
         {
             Singleton.Instance.Nueva.Clear();
-            Singleton.Instance.Procedimiento.Mostrar(Singleton.Instance.ListaJugador.Header, Singleton.Instance.Nueva);
+            Singleton.Instance.Procedimiento.Mostrar(Singleton.Instance.ListaMedicina.Header, Singleton.Instance.Nueva);
 
             return View(Singleton.Instance.Nueva);
         }
@@ -178,10 +183,31 @@ namespace Laboratorio3.Controllers
         }
         public IActionResult AceptarCarrito()//codigo donde se aceptan los cambios del carrito
         {
+            foreach (NodoCarrito Cambios in Singleton.Instance.Carrito) 
+            {
+                DelegadoString InvocarNombreuscar = new DelegadoString(LlamadoMedBinario.CompareString);
+                MedicinasBinario Buscado = Singleton.Instance.AccesoArbol.Buscar(Cambios.Nombre, InvocarNombreuscar);
+
+                InventarioMedicina NodoBuscado = Buscado.Posicion.Data;
+
+                InventarioMedicina NuevoNodo = NodoBuscado;
+                NuevoNodo.Existencia = NuevoNodo.Existencia - Cambios.Cantidad;
+
+                DelegadoInventario delegadoInventario = new DelegadoInventario(LLamadoInventario.CompareName);
+
+                Singleton.Instance.ListaMedicina.Modificar(Singleton.Instance.ListaMedicina.Header,Cambios.Nombre, NuevoNodo, delegadoInventario);
+
+                if (NuevoNodo.Existencia <= 0) 
+                {
+                    DelegadoString ComparacionBorrar = new DelegadoString(LlamadoMedBinario.CompareString);
+                    Singleton.Instance.AccesoArbol.Eliminar(Buscado.Nombre, ComparacionBorrar);
+                }
+            }
             return View();
         }
         public IActionResult ListaCarrito()//mostrar carrito
         {
+            Singleton.Instance.ListaCarrito.Mostrar(Singleton.Instance.ListaCarrito.Header, Singleton.Instance.Carrito);
             return View(Singleton.Instance.Carrito);
         }
         public IActionResult OrdenCliente() 
