@@ -190,7 +190,7 @@ namespace Laboratorio3.Controllers
         {
             foreach (NodoCarrito Cambios in Singleton.Instance.Carrito) 
             {
-                    DelegadoString InvocarNombreuscar = new DelegadoString(LlamadoMedBinario.CompareString);
+                DelegadoString InvocarNombreuscar = new DelegadoString(LlamadoMedBinario.CompareString);
                 MedicinasBinario Buscado = Singleton.Instance.AccesoArbol.Buscar(Cambios.Nombre, InvocarNombreuscar);
 
                 InventarioMedicina NodoBuscado = Buscado.Posicion.Data;
