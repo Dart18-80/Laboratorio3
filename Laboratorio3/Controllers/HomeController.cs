@@ -170,15 +170,19 @@ namespace Laboratorio3.Controllers
             //Mostrar InfoTotalMedicina si fue encontrado
             return View(Singleton.Instance.NuevaListaCliente);
         }
-        public IActionResult Agregar(int SExistencia) 
+        public IActionResult Agregar(int SExistencia) //donde se agregan los nodos a una lista para mostrar en la lista carrito
         {
             ViewData["CurrentSExistencia"] = SExistencia;
 
             return RedirectToAction("AgregarBuscarMedicina"); 
         }
-        public IActionResult ListaCarrito()
+        public IActionResult AceptarCarrito()//codigo donde se aceptan los cambios del carrito
         {
             return View();
+        }
+        public IActionResult ListaCarrito()//mostrar carrito
+        {
+            return View(Singleton.Instance.Carrito);
         }
         public IActionResult OrdenCliente() 
         {
