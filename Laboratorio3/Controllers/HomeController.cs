@@ -141,6 +141,7 @@ namespace Laboratorio3.Controllers
         public IActionResult AgregarBuscarMedicina(string SSearch)
         {
             ViewData["CurrentFilterSearch"] = SSearch;
+            Singleton.Instance.NuevaListaCliente.Clear();
             InventarioMedicina InfoTotalMedicina = new InventarioMedicina();
             if (SSearch!=null)
             {
@@ -152,7 +153,6 @@ namespace Laboratorio3.Controllers
                 }
                 else 
                 {
-                    Singleton.Instance.Nueva.Clear();
                     InfoTotalMedicina = Buscado.Posicion.Data;
                     InventarioMedicina NuevoJuga = new InventarioMedicina
                     {
@@ -163,17 +163,18 @@ namespace Laboratorio3.Controllers
                         Precio = InfoTotalMedicina.Precio,
                         Existencia = InfoTotalMedicina.Existencia
                     };
-                    Singleton.Instance.Nueva.Add(NuevoJuga);
+                    Singleton.Instance.NuevaListaCliente.Add(NuevoJuga);
                 }
             }
             
             //Mostrar InfoTotalMedicina si fue encontrado
-            return View(Singleton.Instance.Nueva);
+            return View(Singleton.Instance.NuevaListaCliente);
         }
-        public IActionResult Agregar(string SExistencia) 
+        public IActionResult Agregar(int SExistencia) 
         {
-            ViewData["SExistenciaExist"] = SExistencia;
-            return View(); 
+            ViewData["CurrentSExistencia"] = SExistencia;
+
+            return RedirectToAction("AgregarBuscarMedicina"); 
         }
     public IActionResult OrdenCliente() 
         {

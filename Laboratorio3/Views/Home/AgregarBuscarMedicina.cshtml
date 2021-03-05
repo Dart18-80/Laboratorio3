@@ -53,8 +53,14 @@
                 @Html.DisplayFor(modelItem => item.Existencia)
             </td>
             <td>
-                <input type="text" name="SExistencia" value="@ViewData["SExistenciaExist"]" />
-                @Html.ActionLink("Agregar", "Agregar", new { /* id=item.PrimaryKey */ }) |
+                <form asp-action="Agregar" method="get">
+                    <div class="from-action no-gutters">
+                        <p>
+                            <input type="text" name="SExistencia" value="@ViewData["CurrentSExistencia"]" /><br />
+                            <input type="submit" value="Agregar" class="btn-info" />
+                        </p>
+                    </div>
+                </form>
             </td>
         </tr>
 }
