@@ -141,8 +141,12 @@ namespace Laboratorio3.Controllers
         public IActionResult AgregarBuscarMedicina(string SSearch)
         {
             ViewData["CurrentFilterSearch"] = SSearch;
-
-            return View(Singleton.Instance.ListExistencia);
+            if (SSearch!=null)
+            {
+                DelegadoString InvocarNombreuscar = new DelegadoString(LlamadoMedBinario.CompareString);
+                Singleton.Instance.AccesoArbol.Buscar(SSearch, InvocarNombreuscar);
+            }
+            return View(Singleton.Instance.Nueva);
         }
         public IActionResult Agregar() 
         {
