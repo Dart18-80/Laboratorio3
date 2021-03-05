@@ -104,6 +104,10 @@ namespace Laboratorio3.Controllers
         {
             ViewData["CurrentFilterSearch"] = SSearch;
             Singleton.Instance.Nueva.Clear();
+            DelegadoInventario delegadoInventario = new DelegadoInventario(LLamadoInventario.CompareName);
+            InventarioMedicina NodoCantidad0 = Singleton.Instance.ListaMedicina.Buscar(Singleton.Instance.ListaMedicina.Header, SSearch, delegadoInventario);
+            Singleton.Instance.Nueva.Add(NodoCantidad0);
+
             Singleton.Instance.Procedimiento.Mostrar(Singleton.Instance.ListaMedicina.Header, Singleton.Instance.Nueva);
 
             return View(Singleton.Instance.Nueva);

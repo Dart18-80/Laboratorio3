@@ -129,7 +129,7 @@ namespace LibreriadeClasesED
                 }
                 else if (Convert.ToInt16(Comparacion.DynamicInvoke(Hijos.Data, Nombre)) > 0)
                 {
-                    Igualar = BuscarNodo(Hijos.Izquierda, Nombre, Comparacion);
+                    Igualar = BuscarNodo(Hijos, Nombre, Comparacion);
                 }
                 else 
                 {
