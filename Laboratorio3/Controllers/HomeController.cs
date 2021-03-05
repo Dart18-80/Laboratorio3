@@ -22,6 +22,7 @@ namespace Laboratorio3.Controllers
         private readonly IHostingEnvironment hostingEnvironment;
         string idparacliente=null;
         int SumaTotal = 0;
+        string medicamentostotales = null;
 
         public HomeController(ILogger<HomeController> logger, IHostingEnvironment hostingEnvironment)
         {
