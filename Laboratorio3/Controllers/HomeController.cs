@@ -20,9 +20,8 @@ namespace Laboratorio3.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHostingEnvironment hostingEnvironment;
-        string idparacliente=null;
-        int SumaTotal = 0;
-        string medicamentostotales = null;
+        public static double SumaTotal = 0;
+        public static string medicamentostotales = null;
 
         public HomeController(ILogger<HomeController> logger, IHostingEnvironment hostingEnvironment)
         {
@@ -116,10 +115,10 @@ namespace Laboratorio3.Controllers
         {
             return View();
         }
-        public IActionResult Abastecer()
+        public IActionResult Abastecer()//Abastecer los medicamnetos iguales a 0, a un numero random
         {
-            
-            return View();
+
+            return RedirectToAction("Index");
         }
         public IActionResult IngresoPedido()
         {
@@ -129,10 +128,6 @@ namespace Laboratorio3.Controllers
         public IActionResult IngresoPedido(IFormCollection collection, string IddeNit)
         {
             ViewData["CurrentNit"] = IddeNit;
-            idparacliente = IddeNit;
-            string dine = "$546.2";
-            string a=dine.Replace("$", string.Empty);
-            double precio = Convert.ToDouble(a.ToString()) ;
             try
             {
                 var NuevoCliente = new Models.Cliente  
@@ -209,6 +204,18 @@ namespace Laboratorio3.Controllers
                 DelegadoInventario delegadoInventario = new DelegadoInventario(LLamadoInventario.CompareName);
 
                 Singleton.Instance.ListaMedicina.Modificar(Singleton.Instance.ListaMedicina.Header,Cambios.Nombre, NuevoNodo, delegadoInventario);
+               
+                if (medicamentostotales != null)
+                {
+                    medicamentostotales += "," + Cambios.Nombre;
+                }
+                else
+                {
+                    medicamentostotales = Cambios.Nombre;
+                }
+                string a = Buscado.Posicion.Data.Precio.Replace("$", string.Empty);
+                double precio = Convert.ToDouble(a.ToString());
+                SumaTotal += Cambios.Cantidad * precio;
                 if (medicamentostotales!=null)
                 {
                     medicamentostotales +=","+Cambios.Nombre;
@@ -243,8 +250,11 @@ namespace Laboratorio3.Controllers
             ViewData["Direccion"] = Direccion;
             ViewData["Nit"] = Nit;
             ViewData["Medi"] = medicamentostotales;
-            ViewData["Total"] = "";
+            ViewData["Total"] = SumaTotal;
+            medicamentostotales = null;
+            SumaTotal = 0;
             return View() ;
+
         }
 [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
