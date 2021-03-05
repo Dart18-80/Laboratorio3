@@ -26,16 +26,6 @@ namespace Laboratorio3.Models
         {
             return Medicamento1.Nombre.CompareTo(Medicamento2);
         }
-        public void Reabastecer(InventarioMedicina MedicinaExist)
-        {
-            Random nre = new Random();
-            int Num = nre.Next(1,15);
-            if (MedicinaExist.Existencia==0)
-            {
-                MedicinaExist.Existencia = Num;
-
-            }
-        }
         public int CompareTo(object obj)
         {
             if (Convert.ToInt16(this.CompareTo(obj)) > 0)
