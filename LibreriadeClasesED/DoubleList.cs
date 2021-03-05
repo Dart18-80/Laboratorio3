@@ -64,6 +64,12 @@ namespace LibreriadeClasesED
                 }
             }
         }
+
+        public void Modificar(T Medicina, T NodoCarrito, Delegate Condicion) 
+        {
+            
+
+        }
         public T Buscar(Nodo<T> Cabeza, string FoundNodo, Delegate Condicion)
         {
             if (Cabeza == null)
