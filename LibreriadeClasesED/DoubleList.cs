@@ -44,11 +44,11 @@ namespace LibreriadeClasesED
             if (Cabeza != null)
             {
                 Lista.Add(Cabeza.Data);
-                Mostrar(Cabeza.Next,Lista);
-                return null;
+                Mostrar(Cabeza.Next, Lista);
+                return Lista;
             }
             else
-                return DataNode;
+                return Lista;
         }
         public void ReabastecerMedicamentos(Nodo<T> cabeza, Delegate Condicion) 
         {
