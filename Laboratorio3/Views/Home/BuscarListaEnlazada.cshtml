@@ -1,22 +1,14 @@
 ﻿@model IEnumerable<Laboratorio3.Models.InventarioMedicina>
 
 @{
-    ViewData["Title"] = "ListaMedicina";
+    ViewData["Title"] = "BuscarListaEnlazada";
 }
 
-<h1>ListaMedicina</h1>
+<h1>BuscarListaEnlazada</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<form asp-action="ListaMedicina" method="get">
-    <div class="from-action no-gutters">
-        <p>
-            Nombre del Medicamento :<input type="text" name="SSearch" value="@ViewData["CurrentFilterSearch"]" /><br />
-            <input type="submit" value="Buscar" class="btn-info" />
-        </p>
-    </div>
-</form>
 <table class="table">
     <thead>
         <tr>

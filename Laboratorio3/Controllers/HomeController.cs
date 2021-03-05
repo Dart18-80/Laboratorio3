@@ -100,8 +100,9 @@ namespace Laboratorio3.Controllers
             }
             return View();
         }
-        public IActionResult ListaMedicina()
+        public IActionResult ListaMedicina(string SSearch)
         {
+            ViewData["CurrentFilterSearch"] = SSearch;
             Singleton.Instance.Nueva.Clear();
             Singleton.Instance.Procedimiento.Mostrar(Singleton.Instance.ListaMedicina.Header, Singleton.Instance.Nueva);
 
@@ -204,7 +205,14 @@ namespace Laboratorio3.Controllers
                 DelegadoInventario delegadoInventario = new DelegadoInventario(LLamadoInventario.CompareName);
 
                 Singleton.Instance.ListaMedicina.Modificar(Singleton.Instance.ListaMedicina.Header,Cambios.Nombre, NuevoNodo, delegadoInventario);
-
+                if (medicamentostotales!=null)
+                {
+                    medicamentostotales +=","+Cambios.Nombre;
+                }
+                else
+                {
+                    medicamentostotales = Cambios.Nombre;
+                }
                 if (NuevoNodo.Existencia <= 0) 
                 {
                     DelegadoString ComparacionBorrar = new DelegadoString(LlamadoMedBinario.CompareString);
@@ -219,6 +227,7 @@ namespace Laboratorio3.Controllers
             Singleton.Instance.Carrito = Singleton.Instance.ListaCarrito.Mostrar(Singleton.Instance.ListaCarrito.Header, Singleton.Instance.Carrito);
             return View(Singleton.Instance.Carrito);
         }
+
         public IActionResult OrdenCliente() 
         {
             string Nombre = Singleton.Instance.ListaCliente[Cliente.cont - 1].NombreCliente;
@@ -229,7 +238,7 @@ namespace Laboratorio3.Controllers
             ViewData["Nombre"] = Nombre;
             ViewData["Direccion"] = Direccion;
             ViewData["Nit"] = Nit;
-            ViewData["Medi"] = "";
+            ViewData["Medi"] = medicamentostotales;
             ViewData["Total"] = "";
             return View() ;
         }
