@@ -179,6 +179,10 @@ namespace Laboratorio3.Controllers
         {
             ViewData["CurrentSExistencia"] = SExistencia;
 
+            NodoCarrito NuevoPedido = new NodoCarrito { Nombre = SNombre, Cantidad = SExistencia };
+
+            Singleton.Instance.ListaCarrito.AddHead(NuevoPedido);
+
             return RedirectToAction("AgregarBuscarMedicina"); 
         }
         public IActionResult AceptarCarrito()//codigo donde se aceptan los cambios del carrito
