@@ -21,9 +21,10 @@ namespace LibreriadeClasesED
             }
             else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, data)) < 0)
             {
-                if (Padre.Derecha.Data == null)
+                if (Padre.Derecha == null)
                 {
-                    Padre.Derecha.Data = data;
+                    NodoBinario<T> NuevoNodo = new NodoBinario<T> { Data = data };
+                    Padre.Derecha = NuevoNodo;
                 }
                 else 
                 {
@@ -32,9 +33,10 @@ namespace LibreriadeClasesED
             }
             else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, data)) > 0)
             {
-                if (Padre.Izquierda.Data == null)
+                if (Padre.Izquierda == null)
                 {
-                    Padre.Izquierda.Data = data;
+                    NodoBinario<T> NuevoNodo = new NodoBinario<T> { Data = data };
+                    Padre.Izquierda = NuevoNodo;
                 }
                 else
                 {
@@ -49,22 +51,24 @@ namespace LibreriadeClasesED
 
         public void Insertar(NodoBinario<T> Nuevo ,T data, Delegate Comparacion) 
         {
-            if (Convert.ToInt16(Comparacion.DynamicInvoke(Nuevo.Data, data)) < 0)
+            if (Convert.ToInt16(Comparacion.DynamicInvoke(Nuevo.Data, data)) > 0)
             {
                 if (Nuevo.Izquierda == null)
                 {
-                    Nuevo.Izquierda.Data = data;
+                    NodoBinario<T> NuevoNodo = new NodoBinario<T> { Data = data };
+                    Nuevo.Izquierda = NuevoNodo;
                 }
                 else
                 {
                     Insertar(Nuevo.Izquierda, data, Comparacion);
                 }
             }
-            else if (Convert.ToInt16(Comparacion.DynamicInvoke(Nuevo.Data, data)) > 0)
+            else if (Convert.ToInt16(Comparacion.DynamicInvoke(Nuevo.Data, data)) < 0)
             {
                 if (Nuevo.Derecha == null)
                 {
-                    Nuevo.Derecha.Data = data;
+                    NodoBinario<T> NuevoNodo = new NodoBinario<T> { Data = data };
+                    Nuevo.Derecha = NuevoNodo;
                 }
                 else
                 {
