@@ -80,6 +80,54 @@ namespace LibreriadeClasesED
             }
         }
 
+        public T Buscar(string Nombre,Delegate Comparacion) 
+        {
+            if (Padre == null)
+            {
+                return default;
+            }
+            else 
+            {
+                if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Nombre)) == 0)
+                {
+                    return Padre.Data;
+                }
+                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Nombre)) < 0)
+                {
+                    BuscarNodo(Padre, Nombre, Comparacion);
+                }
+                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Nombre)) > 0)
+                {
+                    BuscarNodo(Padre, Nombre, Comparacion);
+                }
+                return default;
+            }
+        }
+
+        public T BuscarNodo(NodoBinario<T> Hijos, string Nombre, Delegate Comparacion) 
+        {
+            if (Hijos == null)
+            {
+                return default;
+            }
+            else 
+            {
+                if (Convert.ToInt16(Comparacion.DynamicInvoke(Hijos.Data, Nombre)) == 0)
+                {
+                    return Hijos.Data;
+                }
+                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Hijos.Data, Nombre)) < 0) 
+                {
+                    BuscarNodo(Hijos.Derecha, Nombre, Comparacion);
+                }
+                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Hijos.Data, Nombre)) > 0)
+                {
+                    BuscarNodo(Hijos, Nombre, Comparacion);
+                }
+                return default;
+            }
+        }
+
         public void Eliminar(string Eliminado, Delegate Comparacion) 
         {
             if (Padre != null) 

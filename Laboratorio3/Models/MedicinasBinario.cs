@@ -15,6 +15,10 @@ namespace Laboratorio3.Models
         {
             return obj.Nombre.CompareTo(obj2.Nombre);
         }
+        public int CompareString(MedicinasBinario obj, string obj2)
+        {
+            return obj.Nombre.CompareTo(obj2);
+        }
         public int CompareTo(object obj)
         {
             if (Convert.ToInt16(this.CompareTo(obj)) > 0)

@@ -37,7 +37,8 @@ namespace Laboratorio3.Controllers
 
             return View();
         }
-        delegate int Delagados(MedicinasBinario Med1, MedicinasBinario Med2);//llamar delegado
+        delegate int Delagados(MedicinasBinario Med1, MedicinasBinario Med2); //llamar delegado
+        delegate int DelegadoString(MedicinasBinario Med1, string nombre);
         delegate int Delagado(InventarioMedicina Med);//llamar delegado
 
         MedicinasBinario LlamadoMedBinario = new MedicinasBinario();
