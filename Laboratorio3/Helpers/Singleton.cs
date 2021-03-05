@@ -22,6 +22,7 @@ namespace Laboratorio3.Helpers
         public ArbolBinario<MedicinasBinario> AccesoArbol = new ArbolBinario<MedicinasBinario>();
         public Nodo<InventarioMedicina> Procedimiento = new Nodo<InventarioMedicina>();
         public List<InventarioMedicina> Nueva = new List<InventarioMedicina>();
+        public List<InventarioMedicina> NuevaListaCliente = new List<InventarioMedicina>();
         public List<Cliente> ListaCliente = new List<Cliente>();
         public List<InventarioMedicina> ListExistencia = new List<InventarioMedicina>();
     }
