@@ -21,7 +21,7 @@ namespace LibreriadeClasesED
             }
             else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, data)) < 0)
             {
-                if (Padre.Derecha == null)
+                if (Padre.Derecha.Data == null)
                 {
                     Padre.Derecha.Data = data;
                 }
@@ -32,7 +32,7 @@ namespace LibreriadeClasesED
             }
             else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, data)) > 0)
             {
-                if (Padre.Izquierda == null)
+                if (Padre.Izquierda.Data == null)
                 {
                     Padre.Izquierda.Data = data;
                 }
