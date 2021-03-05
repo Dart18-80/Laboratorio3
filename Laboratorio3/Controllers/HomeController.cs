@@ -214,6 +214,7 @@ namespace Laboratorio3.Controllers
         }
         public IActionResult ListaCarrito()//mostrar carrito
         {
+            Singleton.Instance.Carrito.Clear();
             Singleton.Instance.Carrito = Singleton.Instance.ListaCarrito.Mostrar(Singleton.Instance.ListaCarrito.Header, Singleton.Instance.Carrito);
             return View(Singleton.Instance.Carrito);
         }
