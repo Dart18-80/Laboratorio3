@@ -14,11 +14,6 @@
         </p>
     </div>
 </form>
-<form asp-action="OrdenCliente" method="get">
-    <div class="from-action no-gutters">
-        <input type="submit" value="Ver mi orden" class="btn-info" />
-    </div>
-</form>
 <form asp-action="ListaCarrito" method="get">
     <div class="from-action no-gutters">
         <input type="submit" value="Ver carrito de Medicinas" class="btn-info" />
@@ -61,8 +56,8 @@
                 <form asp-action="Agregar" method="get">
                     <div class="from-action no-gutters">
                         <p>
-                            <input type="text" name="SExistencia" value="@ViewData["CurrentSExistencia"]" /><br />
-                            <input type="text" name="SNombre"  /><br />
+                            <input type="text" name="SExistencia" value="@ViewData["CurrentSExistencia"]"  /><br />
+                            <input  name="SNombre" value=" @Html.DisplayFor(modelItem => item.NombreMedicina)" readonly="readonly" type="hidden"/>
                             <input type="submit" value="Agregar" class="btn-info" />
                         </p>
                     </div>
