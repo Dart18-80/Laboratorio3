@@ -36,7 +36,7 @@ namespace LibreriadeClasesED
                     Next = oldHead
                 };
                 oldHead.Previous = Header;
-                return oldHead;
+                return oldHead.Previous;
             }
         }
         public List<T> Mostrar(Nodo<T> Cabeza)
