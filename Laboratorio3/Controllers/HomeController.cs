@@ -141,11 +141,21 @@ namespace Laboratorio3.Controllers
         public IActionResult AgregarBuscarMedicina(string SSearch)
         {
             ViewData["CurrentFilterSearch"] = SSearch;
+            InventarioMedicina InfoTotalMedicina = new InventarioMedicina();
             if (SSearch!=null)
             {
                 DelegadoString InvocarNombreuscar = new DelegadoString(LlamadoMedBinario.CompareString);
-                Singleton.Instance.AccesoArbol.Buscar(SSearch, InvocarNombreuscar);
+                MedicinasBinario Buscado = Singleton.Instance.AccesoArbol.Buscar(SSearch, InvocarNombreuscar);
+                if (Buscado == default)
+                {
+                    //Mensaje que no lo encontro porque la cantidad de medicinas de ese nombre es 0
+                }
+                else 
+                {
+                    InfoTotalMedicina = Buscado.Posicion.Data;
+                }
             }
+            //Mostrar InfoTotalMedicina si fue encontrado
             return View(Singleton.Instance.Nueva);
         }
         public IActionResult Agregar() 
