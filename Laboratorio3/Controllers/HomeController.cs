@@ -176,7 +176,11 @@ namespace Laboratorio3.Controllers
 
             return RedirectToAction("AgregarBuscarMedicina"); 
         }
-    public IActionResult OrdenCliente() 
+        public IActionResult ListaCarrito()
+        {
+            return View();
+        }
+        public IActionResult OrdenCliente() 
         {
             string Nombre = Singleton.Instance.ListaCliente[Cliente.cont - 1].NombreCliente;
             string Direccion = Singleton.Instance.ListaCliente[Cliente.cont - 1].DireccionCliente;
