@@ -99,14 +99,8 @@ namespace Laboratorio3.Controllers
             }
             return View();
         }
-        public IActionResult ListaMedicina(string SSearch)
+        public IActionResult ListaMedicina()
         {
-            ViewData["CurrentFilterSearch"] = SSearch;
-            Singleton.Instance.Nueva.Clear();
-            DelegadoInventario delegadoInventario = new DelegadoInventario(LLamadoInventario.CompareName);
-            InventarioMedicina NodoCantidad0 = Singleton.Instance.ListaMedicina.Buscar(Singleton.Instance.ListaMedicina.Header, SSearch, delegadoInventario);
-            Singleton.Instance.Nueva.Add(NodoCantidad0);
-
             Singleton.Instance.Procedimiento.Mostrar(Singleton.Instance.ListaMedicina.Header, Singleton.Instance.Nueva);
 
             return View(Singleton.Instance.Nueva);
@@ -117,7 +111,21 @@ namespace Laboratorio3.Controllers
         }
         public IActionResult Abastecer()//Abastecer los medicamnetos iguales a 0, a un numero random
         {
-
+            Singleton.Instance.Nueva.Clear();
+            DelegadoInventario InvocarExistencia = new DelegadoInventario(LLamadoInventario.CompareExistencia);
+            InventarioMedicina NodoBuscado = Singleton.Instance.ListaMedicina.Buscar(Singleton.Instance.ListaMedicina.Header, "0", InvocarExistencia);
+           
+            Random rnd = new Random();
+            int numerorand = rnd.Next(1,15);
+            NodoBuscado.Existencia = numerorand;
+            Nodo<InventarioMedicina> Direccion = Singleton.Instance.ListaMedicina.AddHead(NodoBuscado);
+            MedicinasBinario IngresoArbol = new MedicinasBinario
+            {
+                Nombre =NodoBuscado.NombreMedicina,
+                Posicion = Direccion
+            };
+            Delagados InvocarNombre = new Delagados(LlamadoMedBinario.CompareToNombre);
+            Singleton.Instance.AccesoArbol.Add(IngresoArbol, InvocarNombre);
             return RedirectToAction("Index");
         }
         public IActionResult IngresoPedido()

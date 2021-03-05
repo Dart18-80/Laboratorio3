@@ -30,6 +30,14 @@ namespace Laboratorio3.Models
         {
             return Medicamento1.NombreMedicina.CompareTo(Medicamento2);
         }
+        public int CompareExistencia(InventarioMedicina inventarioMedicina, string Medicamento2)
+        {
+            if (inventarioMedicina.Existencia==0)
+            {
+                return 0;
+            }
+            return default;
+        }
         public int CompareTo(object obj)
         {
             if (Convert.ToInt16(this.CompareTo(obj)) > 0)
