@@ -208,7 +208,7 @@ namespace Laboratorio3.Controllers
                     Singleton.Instance.AccesoArbol.Eliminar(Buscado.Nombre, ComparacionBorrar);
                 }
             }
-            return View();
+            return RedirectToAction("OrdenCliente");
         }
         public IActionResult ListaCarrito()//mostrar carrito
         {
