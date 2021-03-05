@@ -73,7 +73,7 @@ namespace Laboratorio3.Controllers
                                 Descripcion = Convert.ToString(result[5]).Replace('"', ' '),
                                 CasaProductora = Convert.ToString(result[7]).Replace('"', ' '),
                                 Precio = Convert.ToString(result[9]),
-                                Existencia = Convert.ToInt32(result[11]),
+                                Existencia = Convert.ToInt32(result[11])
                             };
                             Nodo<InventarioMedicina> Direccion = Singleton.Instance.ListaJugador.AddHead(Nuevo);
                             MedicinasBinario IngresoArbol = new MedicinasBinario
@@ -152,14 +152,27 @@ namespace Laboratorio3.Controllers
                 }
                 else 
                 {
+                    Singleton.Instance.Nueva.Clear();
                     InfoTotalMedicina = Buscado.Posicion.Data;
+                    InventarioMedicina NuevoJuga = new InventarioMedicina
+                    {
+                        NombreMedicina = InfoTotalMedicina.NombreMedicina,
+                        Id = InfoTotalMedicina.Id,
+                        Descripcion = InfoTotalMedicina.Descripcion,
+                        CasaProductora = InfoTotalMedicina.CasaProductora,
+                        Precio = InfoTotalMedicina.Precio,
+                        Existencia = InfoTotalMedicina.Existencia
+                    };
+                    Singleton.Instance.Nueva.Add(NuevoJuga);
                 }
             }
+            
             //Mostrar InfoTotalMedicina si fue encontrado
             return View(Singleton.Instance.Nueva);
         }
-        public IActionResult Agregar() 
+        public IActionResult Agregar(string SExistencia) 
         {
+            ViewData["SExistenciaExist"] = SExistencia;
             return View(); 
         }
     public IActionResult OrdenCliente() 

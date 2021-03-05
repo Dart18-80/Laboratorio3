@@ -26,6 +26,9 @@
                 @Html.DisplayNameFor(model => model.NombreMedicina)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Precio)
             </th>
             <th>
@@ -38,16 +41,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.NombreMedicina)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CasaProductora)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Precio)
@@ -56,6 +53,7 @@
                 @Html.DisplayFor(modelItem => item.Existencia)
             </td>
             <td>
+                <input type="text" name="SExistencia" value="@ViewData["SExistenciaExist"]" />
                 @Html.ActionLink("Agregar", "Agregar", new { /* id=item.PrimaryKey */ }) |
             </td>
         </tr>
