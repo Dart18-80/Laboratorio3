@@ -27,6 +27,7 @@ namespace Laboratorio3.Helpers
         public List<Cliente> ListaCliente = new List<Cliente>();
         public List<InventarioMedicina> ListExistencia = new List<InventarioMedicina>();
         public List<NodoCarrito> Carrito = new List<NodoCarrito>();
+        public int contadorCero;
 
     }
 }

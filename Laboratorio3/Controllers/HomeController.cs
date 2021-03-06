@@ -91,6 +91,7 @@ namespace Laboratorio3.Controllers
                             {
                                 Delagados InvocarNombre = new Delagados(LlamadoMedBinario.CompareToNombre);
                                 Singleton.Instance.AccesoArbol.Add(IngresoArbol , InvocarNombre);
+                                Singleton.Instance.contadorCero++;
                             }
                         }
                     }
@@ -112,20 +113,23 @@ namespace Laboratorio3.Controllers
         public IActionResult Abastecer()//Abastecer los medicamnetos iguales a 0, a un numero random
         {
             Singleton.Instance.Nueva.Clear();
-            DelegadoInventario InvocarExistencia = new DelegadoInventario(LLamadoInventario.CompareExistencia);
-            InventarioMedicina NodoBuscado = Singleton.Instance.ListaMedicina.Buscar(Singleton.Instance.ListaMedicina.Header, "0", InvocarExistencia);
-           
-            Random rnd = new Random();
-            int numerorand = rnd.Next(1,15);
-            NodoBuscado.Existencia = numerorand;
-            Nodo<InventarioMedicina> Direccion = Singleton.Instance.ListaMedicina.AddHead(NodoBuscado);
-            MedicinasBinario IngresoArbol = new MedicinasBinario
-            {
-                Nombre =NodoBuscado.NombreMedicina,
-                Posicion = Direccion
-            };
-            Delagados InvocarNombre = new Delagados(LlamadoMedBinario.CompareToNombre);
-            Singleton.Instance.AccesoArbol.Add(IngresoArbol, InvocarNombre);
+            while (Singleton.Instance.contadorCero == 0) {
+                DelegadoInventario InvocarExistencia = new DelegadoInventario(LLamadoInventario.CompareExistencia);
+                InventarioMedicina NodoBuscado = Singleton.Instance.ListaMedicina.Buscar(Singleton.Instance.ListaMedicina.Header, "0", InvocarExistencia);
+
+                Random rnd = new Random();
+                int numerorand = rnd.Next(1, 15);
+                NodoBuscado.Existencia = numerorand;
+                Nodo<InventarioMedicina> Direccion = Singleton.Instance.ListaMedicina.AddHead(NodoBuscado);
+                MedicinasBinario IngresoArbol = new MedicinasBinario
+                {
+                    Nombre = NodoBuscado.NombreMedicina,
+                    Posicion = Direccion
+                };
+                Delagados InvocarNombre = new Delagados(LlamadoMedBinario.CompareToNombre);
+                Singleton.Instance.AccesoArbol.Add(IngresoArbol, InvocarNombre);
+                Singleton.Instance.contadorCero--;
+            }
             return RedirectToAction("Index");
         }
         public IActionResult IngresoPedido()
@@ -236,6 +240,10 @@ namespace Laboratorio3.Controllers
                 {
                     DelegadoString ComparacionBorrar = new DelegadoString(LlamadoMedBinario.CompareString);
                     Singleton.Instance.AccesoArbol.Eliminar(Buscado.Nombre, ComparacionBorrar);
+                    if (NuevoNodo.Existencia == 0) 
+                    {
+                        Singleton.Instance.contadorCero++;
+                    }
                 }
             }
             return RedirectToAction("OrdenCliente");
