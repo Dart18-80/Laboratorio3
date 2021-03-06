@@ -113,6 +113,8 @@ namespace Laboratorio3.Controllers
         public IActionResult Abastecer()//Abastecer los medicamnetos iguales a 0, a un numero random
         {
             Singleton.Instance.Nueva.Clear();
+            try
+            {
             while (Singleton.Instance.contadorCero == 0) {
                 DelegadoInventario InvocarExistencia = new DelegadoInventario(LLamadoInventario.CompareExistencia);
                 InventarioMedicina NodoBuscado = Singleton.Instance.ListaMedicina.Buscar(Singleton.Instance.ListaMedicina.Header, "0", InvocarExistencia);
@@ -131,6 +133,12 @@ namespace Laboratorio3.Controllers
                 Singleton.Instance.contadorCero--;
             }
             return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index");
+            }
         }
         public IActionResult IngresoPedido()
         {
