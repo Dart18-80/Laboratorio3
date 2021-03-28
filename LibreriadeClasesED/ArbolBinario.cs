@@ -501,7 +501,7 @@ namespace LibreriadeClasesED
                 }
                 else if (Convert.ToInt16(Comparacion.DynamicInvoke(Hijos.Data, Nombre)) > 0)
                 {
-                    Igualar = BuscarNodoABB(Hijos.IZ, Nombre, Comparacion);
+                    Igualar = BuscarNodoABB(Hijos.Izquierda, Nombre, Comparacion);
                 }
                 else
                 {
