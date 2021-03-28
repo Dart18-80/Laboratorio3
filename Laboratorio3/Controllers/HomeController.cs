@@ -247,7 +247,7 @@ namespace Laboratorio3.Controllers
                 if (NuevoNodo.Existencia <= 0) 
                 {
                     DelegadoString ComparacionBorrar = new DelegadoString(LlamadoMedBinario.CompareString);
-                    Singleton.Instance.AccesoArbol.Eliminar(Buscado.Nombre, ComparacionBorrar);
+                    Singleton.Instance.AccesoArbol.EliminarDeArbol1(Buscado.Nombre , ComparacionBorrar);
                     if (NuevoNodo.Existencia == 0) 
                     {
                         Singleton.Instance.contadorCero++;
@@ -285,5 +285,6 @@ namespace Laboratorio3.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }
