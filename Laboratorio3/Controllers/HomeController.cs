@@ -173,7 +173,7 @@ namespace Laboratorio3.Controllers
             if (SSearch!=null)
             {
                 DelegadoString InvocarNombreuscar = new DelegadoString(LlamadoMedBinario.CompareString);
-                MedicinasBinario Buscado = Singleton.Instance.AccesoArbol.Buscar(SSearch, InvocarNombreuscar);
+                MedicinasBinario Buscado = Singleton.Instance.AccesoArbol.BuscarABB(SSearch, InvocarNombreuscar);
                 if (Buscado == default)
                 {
                     DelegadoInventario delegadoInventario = new DelegadoInventario(LLamadoInventario.CompareName);
@@ -214,7 +214,7 @@ namespace Laboratorio3.Controllers
             foreach (NodoCarrito Cambios in Singleton.Instance.Carrito) 
             {
                 DelegadoString InvocarNombreuscar = new DelegadoString(LlamadoMedBinario.CompareString);
-                MedicinasBinario Buscado = Singleton.Instance.AccesoArbol.Buscar(Cambios.Nombre, InvocarNombreuscar);
+                MedicinasBinario Buscado = Singleton.Instance.AccesoArbol.BuscarABB(Cambios.Nombre, InvocarNombreuscar);
 
                 InventarioMedicina NodoBuscado = Buscado.Posicion.Data;
 

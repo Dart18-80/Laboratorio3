@@ -4,105 +4,477 @@ using System.Text;
 
 namespace LibreriadeClasesED
 {
-    public class ArbolBinario <T> where T : IComparable
+    public class ArbolBinario<T> where T : IComparable
     {
-        public NodoBinario<T> Padre { get; set; }
+        public NodoBinario<T> Raiz { get; set; }
 
         public ArbolBinario()
         {
-            Padre = null;
+            Raiz = null;
         }
-
-        public void Add(T data, Delegate Comparacion) 
+        public void RaízC()
         {
-            if (Padre == null)
+            Raiz = null;
+        }
+        public void Add(T data, Delegate Comparacion)
+        {
+            NodoBinario<T> nuevo = new NodoBinario<T>();
+            nuevo.Data = data;
+            nuevo.Izquierda = null;
+            nuevo.Derecha = null;
+            nuevo.Padre = null;
+            nuevo.Altura = 1;
+            if (Raiz == null)
+                Raiz = nuevo;
+            else
             {
-                Padre = new NodoBinario<T>() { Data = data };
+                Insertar(nuevo, Raiz, Comparacion);
             }
-            else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, data)) < 0)
+        }
+        public void Insertar(NodoBinario<T> Nuevo, NodoBinario<T> n, Delegate Comparacion)
+        {
+            if (n != null)
             {
-                if (Padre.Derecha == null)
+                int compar = Convert.ToInt16(Comparacion.DynamicInvoke(Nuevo.Data, n.Data));
+                if (compar == 0)
                 {
-                    NodoBinario<T> NuevoNodo = new NodoBinario<T> { Data = data };
-                    Padre.Derecha = NuevoNodo;
+
                 }
-                else 
+                else if (compar > 0)
                 {
-                    Insertar(Padre.Derecha, data, Comparacion);
-                }
-            }
-            else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, data)) > 0)
-            {
-                if (Padre.Izquierda == null)
-                {
-                    NodoBinario<T> NuevoNodo = new NodoBinario<T> { Data = data };
-                    Padre.Izquierda = NuevoNodo;
+                    if (n.Derecha != null)
+                    {
+                        Insertar(Nuevo, n.Derecha, Comparacion);
+                        n.Altura = Mayor(n.Derecha, n.Izquierda) + 1;
+                    }
+                    else
+                    {
+                        n.Derecha = Nuevo;
+                        Nuevo.Padre = n;
+                        n.Altura = Mayor(n.Derecha, n.Izquierda) + 1;
+                    }
                 }
                 else
                 {
-                    Insertar(Padre.Izquierda, data, Comparacion);
+                    if (n.Izquierda != null)
+                    {
+                        Insertar(Nuevo, n.Izquierda, Comparacion);
+                        n.Altura = Mayor(n.Derecha, Nuevo.Izquierda) + 1;
+                    }
+                    else
+                    {
+                        n.Izquierda = Nuevo;
+                        Nuevo.Padre = n;
+                        n.Altura = Mayor(n.Derecha, n.Izquierda) + 1;
+                    }
                 }
             }
-            else 
+            int balanceo = Balanceo(n);
+            if (balanceo > 1)
             {
-
+                balanceo = Balanceo(n.Derecha);
+                if (balanceo == -1)
+                {
+                    RotacionDer(n.Derecha);
+                }
+                RotacioIzq(n);
+            }
+            else if (balanceo < -1)
+            {
+                balanceo = Balanceo(n.Izquierda);
+                if (balanceo == 1)
+                {
+                    RotacioIzq(n.Izquierda);
+                }
+                RotacionDer(n);
             }
         }
 
-        public void Insertar(NodoBinario<T> Nuevo ,T data, Delegate Comparacion) 
+        public int Balanceo(NodoBinario<T> N)
         {
-            if (Convert.ToInt16(Comparacion.DynamicInvoke(Nuevo.Data, data)) > 0)
+            if (N.Derecha != null && N.Izquierda != null)
             {
-                if (Nuevo.Izquierda == null)
-                {
-                    NodoBinario<T> NuevoNodo = new NodoBinario<T> { Data = data };
-                    Nuevo.Izquierda = NuevoNodo;
-                }
-                else
-                {
-                    Insertar(Nuevo.Izquierda, data, Comparacion);
-                }
+                return (N.Derecha.Altura - N.Izquierda.Altura);
             }
-            else if (Convert.ToInt16(Comparacion.DynamicInvoke(Nuevo.Data, data)) < 0)
+            else if (N.Derecha != null)
             {
-                if (Nuevo.Derecha == null)
-                {
-                    NodoBinario<T> NuevoNodo = new NodoBinario<T> { Data = data };
-                    Nuevo.Derecha = NuevoNodo;
-                }
-                else
-                {
-                    Insertar(Nuevo.Derecha, data, Comparacion);
-                }
+                return N.Derecha.Altura;
             }
-            else 
+            else if (N.Izquierda != null)
             {
+                return 0 - N.Izquierda.Altura;
+            }
+            else
+            {
+                return 0;
             }
         }
 
-        public T Buscar(string Nombre,Delegate Comparacion) 
+        public int Mayor(NodoBinario<T> a, NodoBinario<T> b)
         {
-            if (Padre == null)
+            if (a != null && b != null)
+            {
+                if (a.Altura > b.Altura)
+                {
+                    return (a.Altura);
+                }
+                else
+                {
+                    return (b.Altura);
+                }
+            }
+            else if (a != null)
+            {
+                return (a.Altura);
+            }
+            else if (b != null)
+            {
+                return (b.Altura);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        public int BuscarUno(string nBuscar, NodoBinario<T> N, Delegate Comparacion)
+        {
+            int NResult = -1;
+            int Verificacion = Convert.ToInt16(Comparacion.DynamicInvoke(nBuscar, Raiz.Data));
+            if (Verificacion == 0)
+            {
+                int compar = Convert.ToInt16(Comparacion.DynamicInvoke(nBuscar, Raiz.Data));
+                if (compar < 0)
+                    if (N.Izquierda != null)
+                    {
+                        NResult = BuscarUno(nBuscar, Raiz.Izquierda, Comparacion);
+                    }
+                    else
+                        if (N.Derecha != null)
+                    {
+                        NResult = BuscarUno(nBuscar, Raiz.Derecha, Comparacion);
+                    }
+            }
+            else
+            {
+                NResult = Raiz.Index;
+            }
+            return NResult;
+        }
+        public int Buscar(string nBuscar, Delegate Comparacion)
+        {
+            int NResult = -1;
+            int Verificacion = Convert.ToInt16(Comparacion.DynamicInvoke(nBuscar, Raiz.Data));
+            if (Verificacion == 0)
+            {
+                int compar = Convert.ToInt16(Comparacion.DynamicInvoke(nBuscar, Raiz.Data));
+                if (compar < 0)
+                    if (Raiz.Izquierda != null)
+                    {
+                        NResult = BuscarUno(nBuscar, Raiz.Izquierda, Comparacion);
+                    }
+                    else
+                        if (Raiz.Derecha != null)
+                    {
+                        NResult = BuscarUno(nBuscar, Raiz.Derecha, Comparacion);
+                    }
+            }
+            else
+            {
+                NResult = Raiz.Index;
+            }
+            return NResult;
+        }
+
+        public T BuscarEUno(string nBuscar, NodoBinario<T> Ant, NodoBinario<T> Estar, Delegate Comparacion)
+        {
+            NodoBinario<T> Nresult = null;
+            int Verificacion = Convert.ToInt16(Comparacion.DynamicInvoke(Nresult, Estar.Data));
+            if (Verificacion == 0)
+            {
+                int compar = Convert.ToInt16(Comparacion.DynamicInvoke(Nresult, Estar.Data));
+                if (compar < 0)
+                {
+                    if (Estar.Izquierda != null)
+                    {
+                        Nresult.Data = BuscarEUno(nBuscar, Estar, Estar.Izquierda, Comparacion);
+                    }
+                }
+                else
+                {
+                    if (Estar.Derecha != null)
+                    {
+                        Nresult.Data = BuscarEUno(nBuscar, Estar, Estar.Derecha, Comparacion);
+                    }
+                }
+            }
+            else
+            {
+                Nresult = Estar;
+            }
+            return Nresult.Data;
+        }
+
+        public T BuscarE(string nBuscar, NodoBinario<T> N, Delegate Comparacion)
+        {
+            NodoBinario<T> Nresult = null;
+            int Vereficacion = Convert.ToInt16(Comparacion.DynamicInvoke(nBuscar, N.Data));
+            if (Vereficacion == 0)
+            {
+                int compar = Convert.ToInt16(Comparacion.DynamicInvoke(nBuscar, N.Data));
+                if (compar < 0)
+                {
+                    if (N.Izquierda != null)
+                    {
+                        Nresult.Data = BuscarE(nBuscar, N.Izquierda, Comparacion);
+                    }
+                }
+                else
+                {
+                    if (N.Derecha != null)
+                    {
+                        Nresult.Data = BuscarE(nBuscar, N.Derecha, Comparacion);
+                    }
+                }
+            }
+            else
+            {
+                Nresult = N;
+            }
+            return Nresult.Data;
+        }
+
+        public void EliminarUno(T nEliminar, NodoBinario<T> n, Delegate Comparacion)
+        {
+            int compar = Convert.ToInt16(Comparacion.DynamicInvoke(nEliminar, n.Data));
+            if (compar == 0)
+            {
+                Eliminar(n);
+            }
+            else if (compar < 0)
+            {
+                if (n.Izquierda != null)
+                {
+                    EliminarUno(nEliminar, n.Izquierda, Comparacion);
+                }
+            }
+            else
+            {
+                if (n.Derecha != null)
+                {
+                    EliminarUno(nEliminar, n.Derecha, Comparacion);
+                }
+            }
+            int balanceo = Balanceo(n);
+            if (balanceo > 1)
+            {
+                balanceo = Balanceo(n.Derecha);
+                if (balanceo == -1)
+                {
+                    RotacionDer(n.Derecha);
+                }
+                RotacioIzq(n);
+            }
+            else if (balanceo < -1)
+            {
+                balanceo = Balanceo(n.Izquierda);
+                if (balanceo == 1)
+                {
+                    RotacioIzq(n.Izquierda);
+                }
+                RotacionDer(n);
+            }
+        }
+
+        public void Eliminar(NodoBinario<T> N)
+        {
+            if (N.Derecha == null && N.Izquierda == null)
+            {
+                if (N.Padre.Derecha == N)
+                {
+                    N.Padre.Derecha = null;
+                }
+                else
+                {
+                    N.Padre.Izquierda = null;
+                }
+            }
+            else if (N.Derecha != null && N.Izquierda != null)
+            {
+                NodoBinario<T> Masizq = MIzquierda(N);
+                if (N.Padre == null)
+                {
+                    Raiz = Masizq;
+                    Masizq.Derecha = N.Derecha;
+                }
+                else
+                {
+                    if (N.Padre.Derecha == null)
+                    {
+                        N.Padre.Derecha = Masizq;
+                        Masizq.Derecha = N.Derecha;
+                    }
+                    else
+                    {
+                        N.Padre.Izquierda = Masizq;
+                        Masizq.Derecha = N.Derecha;
+                    }
+                }
+            }
+            else if (N.Derecha != null)
+            {
+                if (N.Padre.Derecha == N)
+                {
+                    N.Padre.Derecha = N.Derecha;
+                }
+                else
+                {
+                    N.Padre.Izquierda = N.Derecha;
+                }
+            }
+            else
+            {
+                if (N.Padre.Derecha == N)
+                {
+                    N.Padre.Derecha = N.Izquierda;
+                }
+                else
+                {
+                    N.Padre.Izquierda = N.Izquierda;
+                }
+            }
+        }
+
+        public NodoBinario<T> MIzquierda(NodoBinario<T> N)
+        {
+            if (N.Izquierda == null)
+            {
+                Eliminar(N);
+                return N;
+            }
+            else
+            {
+                return MIzquierda(N.Izquierda);
+            }
+        }
+
+        public void RotacioIzq(NodoBinario<T> N)
+        {
+            if (N.Padre != null)
+            {
+                bool Pder;
+                if (N.Padre.Derecha == N)
+                {
+                    Pder = true;
+                    N.Padre.Derecha = N.Derecha;
+                }
+                else
+                {
+                    Pder = false;
+                    N.Padre.Izquierda = N.Derecha;
+                }
+                N.Derecha.Padre = N.Padre;
+                N.Derecha = N.Derecha.Izquierda;
+                if (N.Derecha != null)
+                {
+                    N.Derecha.Padre = N;
+                }
+                if (Pder)
+                {
+                    N.Padre.Derecha.Izquierda = N;
+                    N.Padre = N.Padre.Derecha;
+                }
+                else
+                {
+                    N.Padre.Izquierda.Izquierda = N;
+                    N.Padre = N.Padre.Izquierda;
+                }
+            }
+            else
+            {
+                N.Derecha.Padre = N.Padre;
+                N.Padre = N.Derecha;
+                N.Derecha = N.Derecha.Izquierda;
+                N.Padre.Izquierda = N;
+                if (N.Derecha != null)
+                    N.Derecha.Padre = N;
+                if (N == Raiz)
+                    Raiz = N.Padre;
+            }
+            N.Altura = Mayor(N.Izquierda, N.Izquierda) + 1;
+            N.Padre.Altura = Mayor(N.Padre.Izquierda, N.Padre.Derecha) + 1;
+        }
+
+        public void RotacionDer(NodoBinario<T> N)
+        {
+            if (N.Padre != null)
+            {
+                bool Pder;
+                if (N.Padre.Derecha==N)
+                {
+                    Pder = true;
+                    N.Padre.Derecha = N.Izquierda;
+                }
+                else
+                {
+                    Pder = false;
+                    N.Padre.Izquierda = N.Izquierda;
+                }
+                N.Izquierda.Padre = N.Padre;
+                N.Izquierda = N.Izquierda.Derecha;
+                if (N.Izquierda !=null)
+                {
+                    N.Izquierda.Padre = N;
+                }
+                if (Pder)
+                {
+                    N.Padre.Derecha.Derecha = N;
+                    N.Padre = N.Padre.Derecha;
+                }
+                else
+                {
+                    N.Padre.Izquierda.Derecha = N;
+                    N.Padre = N.Padre.Izquierda;
+                }
+            }
+            else
+            {
+                N.Izquierda.Padre = N.Padre;
+                N.Padre = N.Izquierda;
+                N.Izquierda = N.Izquierda.Derecha;
+                N.Padre.Derecha = N;
+                if (N.Izquierda != null)
+                    N.Izquierda.Padre = N;
+                if (N == Raiz)
+                    Raiz = N.Padre;
+            }
+            N.Altura = Mayor(N.Izquierda, N.Derecha) + 1;
+            N.Padre.Altura = Mayor(N.Padre.Izquierda, N.Padre.Derecha) + 1; ;
+        }
+
+        //Buscar ABB Lab 2
+        public T BuscarABB(string Nombre, Delegate Comparacion) 
+        {
+            if (Raiz == null)
             {
                 return default;
             }
-            else 
+            else
             {
                 T Igualar;
 
-                if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Nombre)) == 0)
+                if (Convert.ToInt16(Comparacion.DynamicInvoke(Raiz.Data, Nombre)) == 0)
                 {
-                    Igualar = Padre.Data;
+                    Igualar = Raiz.Data;
                 }
-                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Nombre)) < 0)
+                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Raiz.Data, Nombre)) < 0)
                 {
-                    Igualar = BuscarNodo(Padre.Derecha, Nombre, Comparacion);
+                    Igualar = BuscarNodoABB(Raiz.Derecha, Nombre, Comparacion);
                 }
-                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Nombre)) > 0)
+                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Raiz.Data, Nombre)) > 0)
                 {
-                    Igualar = BuscarNodo(Padre.Izquierda, Nombre, Comparacion);
+                    Igualar = BuscarNodoABB(Raiz.Izquierda, Nombre, Comparacion);
                 }
-                else 
+                else
                 {
                     Igualar = default;
                 }
@@ -110,13 +482,13 @@ namespace LibreriadeClasesED
             }
         }
 
-        public T BuscarNodo(NodoBinario<T> Hijos, string Nombre, Delegate Comparacion) 
+        public T BuscarNodoABB(NodoBinario<T> Hijos, string Nombre, Delegate Comparacion)
         {
             if (Hijos == null)
             {
                 return default;
             }
-            else 
+            else
             {
                 T Igualar;
                 if (Convert.ToInt16(Comparacion.DynamicInvoke(Hijos.Data, Nombre)) == 0)
@@ -125,138 +497,18 @@ namespace LibreriadeClasesED
                 }
                 else if (Convert.ToInt16(Comparacion.DynamicInvoke(Hijos.Data, Nombre)) < 0)
                 {
-                    Igualar = BuscarNodo(Hijos.Derecha, Nombre, Comparacion);
+                    Igualar = BuscarNodoABB(Hijos.Derecha, Nombre, Comparacion);
                 }
                 else if (Convert.ToInt16(Comparacion.DynamicInvoke(Hijos.Data, Nombre)) > 0)
                 {
-                    Igualar = BuscarNodo(Hijos, Nombre, Comparacion);
+                    Igualar = BuscarNodoABB(Hijos.IZ, Nombre, Comparacion);
                 }
-                else 
+                else
                 {
                     Igualar = default;
                 }
                 return Igualar;
             }
-        }
-
-        public void Eliminar(string Eliminado, Delegate Comparacion) 
-        {
-            if (Padre != null) 
-            {
-                if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Eliminado)) == 0)
-                {
-                    if (Padre.Derecha != null || Padre.Izquierda != null)
-                    {
-                        Padre.Data = MasDerecha(Padre, Padre.Izquierda);
-                    }
-                    else if (Padre.Izquierda != null)
-                    {
-                        Padre.Data = MasDerecha(Padre, Padre.Izquierda);
-                    }
-                    else if (Padre.Derecha != null)
-                    {
-                        Padre.Data = MasIzquierda(Padre, Padre.Derecha);
-                    }
-                    else
-                    {
-                        Padre = null;
-                    }
-                }
-                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Eliminado)) < 0)
-                {
-                    if (Padre.Derecha != null)
-                    {
-                        Delete(Padre, Padre.Derecha, Eliminado, Comparacion);
-                    }
-                }
-                else if (Convert.ToInt16(Comparacion.DynamicInvoke(Padre.Data, Eliminado)) > 0)
-                {
-                    if (Padre.Izquierda != null)
-                    {
-                        Delete(Padre, Padre.Izquierda, Eliminado, Comparacion);
-                    }
-                }
-                else 
-                {
-                    //No se encontro el nodo
-                }
-            }
-        }
-
-        public void Delete(NodoBinario<T> Origen, NodoBinario<T> Siguiente, string Eliminado, Delegate Condicion) 
-        {
-            if (Convert.ToInt16(Condicion.DynamicInvoke(Siguiente.Data, Eliminado)) == 0)
-            {
-                if (Siguiente.Derecha != null || Siguiente.Izquierda != null)
-                { 
-                    Siguiente.Data = MasDerecha(Siguiente, Siguiente.Izquierda);
-                }
-                else if (Siguiente.Izquierda != null)
-                {
-                    Siguiente.Data = MasDerecha(Siguiente, Siguiente.Izquierda);
-                }
-                else if (Siguiente.Derecha != null)
-                {
-                    Siguiente.Data = MasIzquierda(Siguiente, Siguiente.Derecha);
-                }
-                else
-                {
-                    if (Convert.ToInt16(Condicion.DynamicInvoke(Origen.Data, Eliminado)) < 0)
-                    {
-                        Origen.Derecha = null;
-                    }
-                    else 
-                    {
-                        Origen.Izquierda = null;
-                    }
-                }
-            }
-            else if (Convert.ToInt16(Condicion.DynamicInvoke(Siguiente.Data, Eliminado)) < 0)
-            {
-                if (Siguiente.Derecha != null)
-                {
-                    Delete(Siguiente, Siguiente.Derecha, Eliminado, Condicion);
-                }
-            }
-            else if (Convert.ToInt16(Condicion.DynamicInvoke(Siguiente.Data, Eliminado)) > 0) 
-            {
-                if (Siguiente.Izquierda != null)
-                {
-                    Delete(Siguiente, Siguiente.Izquierda, Eliminado, Condicion);
-                }
-            }
-        }
-
-        public T MasDerecha(NodoBinario<T> Origen, NodoBinario<T> Siguiente) 
-        {
-            if (Siguiente.Derecha != null)
-            {
-                MasDerecha(Siguiente, Siguiente.Derecha);
-                return default;
-            }
-            else 
-            {
-                Origen.Derecha = null;
-                return Siguiente.Data;
-            }
-        }
-        public T MasIzquierda(NodoBinario<T> Origen, NodoBinario<T> Siguiente)
-        {
-            if (Siguiente.Izquierda != null)
-            {
-                MasDerecha(Siguiente, Siguiente.Izquierda);
-                return default;
-            }
-            else
-            {
-                Origen.Izquierda = null;
-                return Siguiente.Data;
-            }
-        }
-
-        public T EnviarDentro() 
-        {
-            return Padre.Data;
         }
     }
 }
