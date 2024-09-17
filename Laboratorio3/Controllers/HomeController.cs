@@ -173,7 +173,7 @@ namespace Laboratorio3.Controllers
             if (SSearch!=null)
             {
                 DelegadoString InvocarNombreuscar = new DelegadoString(LlamadoMedBinario.CompareString);
-                MedicinasBinario Buscado = Singleton.Instance.AccesoArbol.Buscar(SSearch, InvocarNombreuscar);
+                MedicinasBinario Buscado = Singleton.Instance.AccesoArbol.BuscarABB(SSearch, InvocarNombreuscar);
                 if (Buscado == default)
                 {
                     DelegadoInventario delegadoInventario = new DelegadoInventario(LLamadoInventario.CompareName);
@@ -214,7 +214,7 @@ namespace Laboratorio3.Controllers
             foreach (NodoCarrito Cambios in Singleton.Instance.Carrito) 
             {
                 DelegadoString InvocarNombreuscar = new DelegadoString(LlamadoMedBinario.CompareString);
-                MedicinasBinario Buscado = Singleton.Instance.AccesoArbol.Buscar(Cambios.Nombre, InvocarNombreuscar);
+                MedicinasBinario Buscado = Singleton.Instance.AccesoArbol.BuscarABB(Cambios.Nombre, InvocarNombreuscar);
 
                 InventarioMedicina NodoBuscado = Buscado.Posicion.Data;
 
@@ -247,7 +247,7 @@ namespace Laboratorio3.Controllers
                 if (NuevoNodo.Existencia <= 0) 
                 {
                     DelegadoString ComparacionBorrar = new DelegadoString(LlamadoMedBinario.CompareString);
-                    Singleton.Instance.AccesoArbol.Eliminar(Buscado.Nombre, ComparacionBorrar);
+                    Singleton.Instance.AccesoArbol.EliminarDeArbol1(Buscado.Nombre , ComparacionBorrar);
                     if (NuevoNodo.Existencia == 0) 
                     {
                         Singleton.Instance.contadorCero++;
@@ -285,5 +285,6 @@ namespace Laboratorio3.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }
